@@ -1,0 +1,134 @@
+From b0157f8740fd5a5decf405f27e942fcb8a5da59d Mon Sep 17 00:00:00 2001
+From: Danct12 <danct12@disroot.org>
+Date: Sat, 29 Jun 2024 20:14:19 +0700
+Subject: [PATCH 1/2] Cleanup and fix references
+
+---
+ Makefile             | 48 ++++++++++++--------------------------------
+ libmincrypt/Makefile | 30 +++++++++------------------
+ 2 files changed, 22 insertions(+), 56 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 2818d064..325242ac 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,33 +1,11 @@
+-ifeq ($(CC),cc)
+-CC = gcc
+-endif
+-AR = ar rc
+-ifeq ($(windir),)
+-EXT =
+-RM = rm -f
+-CP = cp
+-else
+-EXT = .exe
+-RM = del
+-CP = copy /y
+-endif
++CC = $(CROSS_COMPILE)gcc
+ 
+ CFLAGS += -ffunction-sections -O3
++LDFLAGS += -Wl,--gc-sections -s
+ 
+ INC = -I.
+ 
+-ifneq (,$(findstring darwin,$(CROSS_COMPILE)))
+-	UNAME_S := Darwin
+-else
+-	UNAME_S := $(shell uname -s)
+-endif
+-ifeq ($(UNAME_S),Darwin)
+-	LDFLAGS += -Wl,-dead_strip
+-else
+-	LDFLAGS += -Wl,--gc-sections -s
+-endif
+-
+-all:mkbootimg$(EXT) unpackbootimg$(EXT)
++all: mkbootimg unpackbootimg
+ 
+ static:
+ 	$(MAKE) CFLAGS="$(CFLAGS)" LDFLAGS="$(LDFLAGS) -static"
+@@ -35,21 +13,21 @@ static:
+ libmincrypt.a:
+ 	$(MAKE) CFLAGS="$(CFLAGS)" -C libmincrypt
+ 
+-mkbootimg$(EXT):mkbootimg.o libmincrypt.a
+-	$(CROSS_COMPILE)$(CC) -o $@ $^ -L. -lmincrypt $(LDFLAGS)
++mkbootimg: mkbootimg.o libmincrypt.a
++	$(CC) -o $@ $^ -L. -lmincrypt $(LDFLAGS)
+ 
+-unpackbootimg$(EXT):unpackbootimg.o
+-	$(CROSS_COMPILE)$(CC) -o $@ $^ $(LDFLAGS)
++unpackbootimg: unpackbootimg.o
++	$(CC) -o $@ $^ $(LDFLAGS)
+ 
+-%.o:%.c
+-	$(CROSS_COMPILE)$(CC) -o $@ $(CFLAGS) -c $< $(INC) -Werror
++%.o: %.c
++	$(CC) -o $@ $(CFLAGS) -c $< $(INC) -Werror
+ 
+ install:
+-	install -m 755 mkbootimg$(EXT) $(PREFIX)/bin
+-	install -m 755 unpackbootimg$(EXT) $(PREFIX)/bin
++	install -m 755 mkbootimg $(PREFIX)/bin
++	install -m 755 unpackbootimg $(PREFIX)/bin
+ 
+ clean:
+-	$(RM) mkbootimg unpackbootimg
+-	$(RM) *.a *.~ *.exe *.o
++	rm mkbootimg unpackbootimg
++	rm *.a *.~ *.o
+ 	$(MAKE) -C libmincrypt clean
+ 
+diff --git a/libmincrypt/Makefile b/libmincrypt/Makefile
+index 3ef33026..1d18da7d 100755
+--- a/libmincrypt/Makefile
++++ b/libmincrypt/Makefile
+@@ -1,34 +1,22 @@
+-ifeq ($(CC),cc)
+-CC = gcc
+-endif
+-AR = ar rc
+-ifeq ($(windir),)
+-EXT =
+-RM = rm -f
+-CP = cp
+-else
+-EXT = .exe
+-RM = del
+-CP = copy /y
+-endif
++CC = $(CROSS_COMPILE)gcc
++AR = $(CROSS_COMPILE)ar
+ 
+ CFLAGS += -ffunction-sections -O3
+ 
+ INC = -I..
+ 
+-EXT = .a
+-LIB = libmincrypt$(EXT)
++LIB = libmincrypt.a
+ LIB_OBJS = dsa_sig.o p256.o p256_ec.o p256_ecdsa.o rsa.o sha.o sha256.o
+ 
+-all:$(LIB)
++all: $(LIB)
+ 
+-$(LIB):$(LIB_OBJS)
+-	$(CROSS_COMPILE)$(AR) $@ $^
+-	$(CP) $@ ..
++$(LIB): $(LIB_OBJS)
++	$(CROSS_COMPILE)$(AR) rc $@ $^
++	cp $@ ..
+ 
+-%.o:%.c
++%.o: %.c
+ 	$(CROSS_COMPILE)$(CC) -o $@ $(CFLAGS) -c $< $(INC) -Werror
+ 
+ clean:
+-	$(RM) $(LIB_OBJS) $(LIB)
++	rm $(LIB_OBJS) $(LIB)
+ 
+-- 
+2.45.2
+
