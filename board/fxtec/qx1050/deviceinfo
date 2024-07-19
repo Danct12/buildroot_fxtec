@@ -1,0 +1,18 @@
+deviceinfo_format_version="0"
+
+deviceinfo_arch="aarch64"
+
+deviceinfo_name="Pro1x"
+deviceinfo_manufacturer="Fxtec"
+deviceinfo_codename="qx1050"
+
+deviceinfo_kernel_cmdline="panic=5 earlycon console=tty0 root=/dev/sde4"
+
+deviceinfo_flash_offset_base="0x0"
+deviceinfo_flash_offset_kernel="0x8000"
+deviceinfo_flash_offset_ramdisk="0x1000000"
+deviceinfo_flash_offset_second="0xf00000"
+deviceinfo_flash_offset_tags="0x100"
+deviceinfo_flash_pagesize="4096"
+
+deviceinfo_rootfs_image_sector_size="4096"
