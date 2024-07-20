@@ -9,7 +9,7 @@ RMTFS_SITE = https://github.com/linux-msm/rmtfs.git
 RMTFS_SITE_METHOD = git
 RMTFS_LICENSE = BSD-3-Clause
 
-RMTFS_DEPENDENCIES = qrtr
+RMTFS_DEPENDENCIES = qrtr udev
 
 RMTFS_BUILD_TARGETS = rmtfs
 
