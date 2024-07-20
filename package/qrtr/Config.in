@@ -1,0 +1,15 @@
+config BR2_PACKAGE_QRTR
+	bool "qrtr"
+	help
+	  Userspace reference for net/qrtr in the Linux kernel.
+
+	  https://github.com/linux-msm/qrtr
+
+if BR2_PACKAGE_QRTR
+	config BR2_PACKAGE_QRTR_NS
+		bool "Build qrtr-ns binary"
+		default n
+		help
+		This builds QRTR nameservice binary. It's likely you will not
+		need it as it's been part of the kernel since kernel 5.7.
+endif
