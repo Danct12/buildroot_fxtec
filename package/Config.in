@@ -1,5 +1,6 @@
 menu "Target packages"
     source "$BR2_EXTERNAL_FXTEC_BR_PATH/package/mkbootimg/Config.in"
     source "$BR2_EXTERNAL_FXTEC_BR_PATH/package/qrtr/Config.in"
+    source "$BR2_EXTERNAL_FXTEC_BR_PATH/package/rmtfs/Config.in"
     source "$BR2_EXTERNAL_FXTEC_BR_PATH/package/tqftpserv/Config.in"
 endmenu

@@ -1,0 +1,7 @@
+config BR2_PACKAGE_RMTFS
+	bool "rmtfs"
+	select BR2_PACKAGE_QRTR
+	help
+	  Qualcomm Remote Filesystem Service Implementation
+
+	  https://github.com/linux-msm/rmtfs
