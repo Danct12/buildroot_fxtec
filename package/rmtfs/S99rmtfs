@@ -1,12 +1,13 @@
 #!/bin/sh
 
 DAEMON="rmtfs"
-TQFTPSERV="/usr/bin/rmtfs"
+RMTFS="/usr/bin/rmtfs"
+RMTFS_ARGS="-r -P -s"
 PIDFILE="/var/run/$DAEMON.pid"
 
 start() {
 	printf 'Starting %s: ' "$DAEMON"
-	start-stop-daemon -S -q -b -m -p "$PIDFILE" -x $TQFTPSERV
+	start-stop-daemon -S -q -b -m -p "$PIDFILE" -x $RMTFS -- $RMTFS_ARGS
 	status=$?
 	if [ "$status" -eq 0 ]; then
 		echo "OK"
