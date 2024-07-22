@@ -6,7 +6,7 @@ deviceinfo_name="Pro1x"
 deviceinfo_manufacturer="Fxtec"
 deviceinfo_codename="qx1050"
 
-deviceinfo_kernel_cmdline="panic=5 earlycon console=tty0 root=/dev/sde4"
+deviceinfo_kernel_cmdline="panic=5 earlycon console=tty0 root=/dev/sda13"
 
 deviceinfo_flash_offset_base="0x0"
 deviceinfo_flash_offset_kernel="0x8000"
