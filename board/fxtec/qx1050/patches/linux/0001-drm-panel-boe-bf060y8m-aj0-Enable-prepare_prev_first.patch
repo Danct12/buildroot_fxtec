@@ -1,0 +1,34 @@
+From 194f267d31a63787d9a725bb03af10a1b62506e4 Mon Sep 17 00:00:00 2001
+From: Dang Huynh <danct12@riseup.net>
+Date: Sun, 3 Dec 2023 00:28:27 +0700
+Subject: [PATCH 01/12] drm: panel: boe-bf060y8m-aj0: Enable prepare_prev_first
+
+Enable prepare_prev_first flag for BF060Y8M-AJ0 panel so that the
+previous controller should be prepared first before the prepare for
+the panel is called.
+
+This makes sure that the previous controller, likely to be a DSI host
+controller should be initialized to LP-11 before the panel is powered up.
+
+Suggested-by: Marijn Suijten <marijn.suijten@somainline.org>
+Signed-off-by: Dang Huynh <danct12@riseup.net>
+---
+ drivers/gpu/drm/panel/panel-boe-bf060y8m-aj0.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/gpu/drm/panel/panel-boe-bf060y8m-aj0.c b/drivers/gpu/drm/panel/panel-boe-bf060y8m-aj0.c
+index e77db8597eb7..7e66db4a88bb 100644
+--- a/drivers/gpu/drm/panel/panel-boe-bf060y8m-aj0.c
++++ b/drivers/gpu/drm/panel/panel-boe-bf060y8m-aj0.c
+@@ -377,6 +377,8 @@ static int boe_bf060y8m_aj0_probe(struct mipi_dsi_device *dsi)
+ 	drm_panel_init(&boe->panel, dev, &boe_bf060y8m_aj0_panel_funcs,
+ 		       DRM_MODE_CONNECTOR_DSI);
+ 
++	boe->panel.prepare_prev_first = true;
++
+ 	boe->panel.backlight = boe_bf060y8m_aj0_create_backlight(dsi);
+ 	if (IS_ERR(boe->panel.backlight))
+ 		return dev_err_probe(dev, PTR_ERR(boe->panel.backlight),
+-- 
+2.45.2
+

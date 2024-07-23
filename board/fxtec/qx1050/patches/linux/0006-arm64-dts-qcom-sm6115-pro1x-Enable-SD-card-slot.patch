@@ -1,0 +1,66 @@
+From fa7cd13e6ff75e2d58d31be26919808a3e40f0db Mon Sep 17 00:00:00 2001
+From: Dang Huynh <danct12@riseup.net>
+Date: Thu, 30 Nov 2023 02:33:25 +0700
+Subject: [PATCH 06/12] arm64: dts: qcom: sm6115-pro1x: Enable SD card slot
+
+Fxtec Pro1X has two card slots and allow either 2xSIM cards or
+1xSIM, 1xSD Card configuration.
+
+Signed-off-by: Dang Huynh <danct12@riseup.net>
+---
+ .../boot/dts/qcom/sm6115-fxtec-pro1x.dts      | 32 +++++++++++++++++++
+ 1 file changed, 32 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+index 522abc64d930..7ac698fac9bf 100644
+--- a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
++++ b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+@@ -191,6 +191,7 @@ pm6125_l4a: l4 {
+ 		pm6125_l5a: l5 {
+ 			regulator-min-microvolt = <1648000>;
+ 			regulator-max-microvolt = <3056000>;
++			regulator-allow-set-load;
+ 		};
+ 
+ 		pm6125_l6a: l6 {
+@@ -292,6 +293,37 @@ pm6125_l24a: l24 {
+ 	};
+ };
+ 
++&sdc2_state_off {
++	cd-pins {
++		pins = "gpio88";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-disable;
++	};
++};
++
++&sdc2_state_on {
++	cd-pins {
++		pins = "gpio88";
++		function = "gpio";
++		drive-strength = <2>;
++		bias-pull-up;
++	};
++};
++
++&sdhc_2 {
++	pinctrl-0 = <&sdc2_state_on>;
++	pinctrl-1 = <&sdc2_state_off>;
++	pinctrl-names = "default", "sleep";
++
++	cd-gpios = <&tlmm 88 GPIO_ACTIVE_LOW>;
++
++	vmmc-supply = <&pm6125_l22a>;
++	vqmmc-supply = <&pm6125_l5a>;
++
++	status = "okay";
++};
++
+ &sleep_clk {
+ 	clock-frequency = <32764>;
+ };
+-- 
+2.45.2
+

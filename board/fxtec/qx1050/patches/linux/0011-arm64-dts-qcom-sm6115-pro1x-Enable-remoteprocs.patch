@@ -1,0 +1,42 @@
+From be16fcf580efa90c2f0cdd1b8677bca0321b68b4 Mon Sep 17 00:00:00 2001
+From: Dang Huynh <danct12@riseup.net>
+Date: Fri, 19 Jul 2024 17:06:06 +0700
+Subject: [PATCH 11/12] arm64: dts: qcom: sm6115-pro1x: Enable remoteprocs
+
+Enable [A,C]DSP and MPSS remote processor on this device.
+
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Signed-off-by: Dang Huynh <danct12@riseup.net>
+---
+ arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+index 7ea9ecf37ae9..3f6676edc9a7 100644
+--- a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
++++ b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+@@ -267,6 +267,21 @@ &qupv3_id_0 {
+ 	status = "okay";
+ };
+ 
++&remoteproc_adsp {
++	firmware-name = "qcom/sm6115/Fxtec/QX1050/adsp.mbn";
++	status = "okay";
++};
++
++&remoteproc_cdsp {
++	firmware-name = "qcom/sm6115/Fxtec/QX1050/cdsp.mbn";
++	status = "okay";
++};
++
++&remoteproc_mpss {
++	firmware-name = "qcom/sm6115/Fxtec/QX1050/modem.mbn";
++	status = "okay";
++};
++
+ &rpm_requests {
+ 	regulators-0 {
+ 		compatible = "qcom,rpm-pm6125-regulators";
+-- 
+2.45.2
+

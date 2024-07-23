@@ -1,0 +1,89 @@
+From d110ab7e6ed7cbd81c17fd349cddb80e15944647 Mon Sep 17 00:00:00 2001
+From: Dang Huynh <danct12@riseup.net>
+Date: Tue, 28 Nov 2023 02:48:53 +0700
+Subject: [PATCH 04/12] arm64: dts: qcom: sm6115-pro1x: Add Goodix Touchscreen
+
+The Fxtec Pro1X touchscreen uses Goodix GT9286 chip.
+
+Signed-off-by: Dang Huynh <danct12@riseup.net>
+---
+ .../boot/dts/qcom/sm6115-fxtec-pro1x.dts      | 49 +++++++++++++++++++
+ 1 file changed, 49 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+index 80186a5e975f..a07d66461e41 100644
+--- a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
++++ b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+@@ -63,6 +63,20 @@ key-volume-up {
+ 			wakeup-source;
+ 		};
+ 	};
++
++	ts_vdd_supply: ts-vdd-supply {
++		compatible = "regulator-fixed";
++		regulator-name = "ts_vdd_supply";
++		gpio = <&pca9534 3 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
++
++	ts_vddio_supply: ts-vddio-supply {
++		compatible = "regulator-fixed";
++		regulator-name = "ts_vddio_supply";
++		gpio = <&pca9534 2 GPIO_ACTIVE_HIGH>;
++		enable-active-high;
++	};
+ };
+ 
+ &dispcc {
+@@ -87,6 +101,27 @@ pca9534: gpio@21 {
+ 	};
+ };
+ 
++&i2c2 {
++	status = "okay";
++	/* Clock frequency was not specified downstream, let's park it to 100 KHz */
++	clock-frequency = <100000>;
++
++	touchscreen@14 {
++		compatible = "goodix,gt9286";
++		reg = <0x14>;
++
++		interrupts-extended = <&tlmm 80 IRQ_TYPE_LEVEL_LOW>;
++
++		irq-gpios = <&tlmm 80 IRQ_TYPE_LEVEL_LOW>;
++		reset-gpios = <&tlmm 71 GPIO_ACTIVE_HIGH>;
++		AVDD28-supply = <&ts_vdd_supply>;
++		VDDIO-supply = <&ts_vddio_supply>;
++
++		pinctrl-0 = <&ts_int_n>, <&ts_rst_n>;
++		pinctrl-names = "default";
++	};
++};
++
+ &pm6125_gpios {
+ 	vol_up_n: vol-up-n-state {
+ 		pins = "gpio5";
+@@ -263,6 +298,20 @@ key_camera_n: key-camera-n {
+ 		drive-strength = <2>;
+ 		bias-pull-up;
+ 	};
++
++	ts_int_n: ts-int-n {
++		pins = "gpio80";
++		function = "gpio";
++		drive-strength = <8>;
++		bias-pull-up;
++	};
++
++	ts_rst_n: ts-rst-n {
++		pins = "gpio71";
++		function = "gpio";
++		drive-strength = <8>;
++		bias-pull-up;
++	};
+ };
+ 
+ &ufs_mem_hc {
+-- 
+2.45.2
+

@@ -1,0 +1,47 @@
+From f4029f82b73e688b662f8d77d948081c4eea0590 Mon Sep 17 00:00:00 2001
+From: Dang Huynh <danct12@riseup.net>
+Date: Thu, 30 Nov 2023 02:17:47 +0700
+Subject: [PATCH 05/12] arm64: dts: qcom: sm6115-pro1x: Add Caps Lock LED
+
+The Pro1X has a caps lock LED on the keyboard.
+
+Signed-off-by: Dang Huynh <danct12@riseup.net>
+---
+ arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+index a07d66461e41..522abc64d930 100644
+--- a/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
++++ b/arch/arm64/boot/dts/qcom/sm6115-fxtec-pro1x.dts
+@@ -8,6 +8,7 @@
+ #include "sm6115.dtsi"
+ #include "pm6125.dtsi"
+ #include <dt-bindings/arm/qcom,ids.h>
++#include <dt-bindings/leds/common.h>
+ 
+ / {
+ 	model = "F(x)tec Pro1X (QX1050)";
+@@ -64,6 +65,19 @@ key-volume-up {
+ 		};
+ 	};
+ 
++	gpio-leds {
++		compatible = "gpio-leds";
++
++		capslock-led {
++			label = "green:capslock";
++			function = LED_FUNCTION_CAPSLOCK;
++			color = <LED_COLOR_ID_GREEN>;
++			gpios = <&pca9534 1 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "kbd-capslock";
++			default-state = "off";
++		};
++	};
++
+ 	ts_vdd_supply: ts-vdd-supply {
+ 		compatible = "regulator-fixed";
+ 		regulator-name = "ts_vdd_supply";
+-- 
+2.45.2
+
