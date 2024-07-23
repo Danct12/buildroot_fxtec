@@ -1,4 +1,5 @@
 menu "Target packages"
+    source "$BR2_EXTERNAL_FXTEC_BR_PATH/package/firmware-fxtec-qx1050/Config.in"
     source "$BR2_EXTERNAL_FXTEC_BR_PATH/package/mkbootimg/Config.in"
     source "$BR2_EXTERNAL_FXTEC_BR_PATH/package/pd-mapper/Config.in"
     source "$BR2_EXTERNAL_FXTEC_BR_PATH/package/qrtr/Config.in"

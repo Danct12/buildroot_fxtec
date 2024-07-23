@@ -1,0 +1,36 @@
+config BR2_PACKAGE_FIRMWARE_FXTEC_QX1050
+	bool "firmware-fxtec-qx1050"
+	help
+	  Firmware for F(x)tec Pro1X (QX1050).
+
+if BR2_PACKAGE_FIRMWARE_FXTEC_QX1050
+config BR2_PACKAGE_FIRMWARE_FXTEC_QX1050_ADRENO
+	bool "GPU firmware"
+	help
+	  Adreno GPU firmware for QX1050
+
+config BR2_PACKAGE_FIRMWARE_FXTEC_QX1050_ADSP
+	bool "ADSP firmware"
+	help
+	  ADSP (Audio Digital Signal Processor) firmware for QX1050
+
+config BR2_PACKAGE_FIRMWARE_FXTEC_QX1050_CDSP
+	bool "CDSP firmware"
+	help
+	  CDSP (Compute Digital Signal Processor) firmware for QX1050
+
+config BR2_PACKAGE_FIRMWARE_FXTEC_QX1050_MODEM
+	bool "Modem firmware"
+	help
+	  Modem firmware for QX1050
+
+config BR2_PACKAGE_FIRMWARE_FXTEC_QX1050_WLAN
+	bool "WLAN firmware"
+	select BR2_PACKAGE_FIRMWARE_FXTEC_QX1050_MODEM
+	help
+	  WLAN firmware for QX1050.
+
+	  This also requires the modem firmware as the modem OS
+	  is used to start the WLAN coprocessor.
+
+endif
